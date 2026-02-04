@@ -61,11 +61,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         }}
       />
 
-      {/* 龙珠装饰 */}
+      {/* 龙珠装饰 - 七颗龙珠 */}
       <DragonBall stars={1} style={{ top: '10%', left: '5%' }} />
       <DragonBall stars={2} style={{ top: '20%', right: '8%' }} />
       <DragonBall stars={3} style={{ top: '60%', left: '3%' }} />
       <DragonBall stars={4} style={{ top: '70%', right: '5%' }} />
+      <DragonBall stars={5} style={{ top: '40%', left: '92%' }} />
+      <DragonBall stars={6} style={{ top: '85%', left: '10%' }} />
+      <DragonBall stars={7} style={{ top: '50%', right: '3%' }} />
 
       {/* 导航栏 */}
       <Navbar />
@@ -89,16 +92,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </Link>
 
         {/* 文章标题 */}
-        <header className="mb-8 pb-6 border-b border-[var(--border-gold)]">
+        <header className="mb-8 pb-6 border-b border-[var(--border-gold)] animate-fade-in-up">
           <h1
             className="font-bangers font-bold mb-4"
             style={{
-              fontSize: 'clamp(28px, 5vw, 42px)',
-              background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 100%)',
+              fontSize: 'clamp(28px, 5vw, 48px)',
+              background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 50%, #ff4444 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              letterSpacing: '1.5px',
+              letterSpacing: 'clamp(1px, 0.5vw, 3px)',
+              textShadow: '0 0 40px var(--dragon-orange-glow)',
+              animation: 'glow-pulse 2s ease-in-out infinite',
             }}
           >
             {article.title}
