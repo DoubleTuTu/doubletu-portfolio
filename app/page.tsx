@@ -87,7 +87,7 @@ export default function Home() {
         {/* 个人简介 */}
         <section className="text-center mb-12 md:mb-16 animate-fade-in-up">
           <h1
-            className="font-zcool font-bold mb-4 md:mb-5"
+            className="font-bangers font-bold mb-4 md:mb-5"
             style={{
               fontSize: 'clamp(32px, 6vw, 56px)',
               background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 50%, #ff4444 100%)',
