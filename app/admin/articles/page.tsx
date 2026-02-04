@@ -24,7 +24,8 @@ export default function AdminArticlesPage() {
     try {
       const response = await fetch('/api/articles');
       if (response.ok) {
-        const data = await response.json();
+        const result = await response.json();
+        const data = result.articles || [];
         // 按发布时间倒序排列
         const sorted = data.sort((a: Article, b: Article) =>
           new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
@@ -39,18 +40,14 @@ export default function AdminArticlesPage() {
   };
 
   // 删除文章的函数（客户端调用）
-  const deleteArticle = async (slug: string, title: string) => {
+  const deleteArticle = async (id: string, title: string) => {
     if (!confirm(`确定要删除文章《${title}》吗？此操作不可恢复。`)) {
       return;
     }
 
     try {
-      const response = await fetch('/api/articles', {
+      const response = await fetch(`/api/articles?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ slug }),
       });
 
       if (response.ok) {
@@ -59,7 +56,7 @@ export default function AdminArticlesPage() {
         fetchArticles();
       } else {
         const error = await response.json();
-        alert(`删除失败：${error.message || '未知错误'}`);
+        alert(`删除失败：${error.error || '未知错误'}`);
       }
     } catch (error) {
       alert(`删除失败：${error instanceof Error ? error.message : '未知错误'}`);
@@ -239,7 +236,7 @@ export default function AdminArticlesPage() {
                     ✏️ 编辑
                   </Link>
                   <button
-                    onClick={() => deleteArticle(article.slug, article.title)}
+                    onClick={() => deleteArticle(article.id, article.title)}
                     className="px-4 py-2 rounded-lg font-zcool font-bold text-sm transition-all hover:scale-105"
                     style={{
                       background: 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)',
