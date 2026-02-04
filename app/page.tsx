@@ -86,20 +86,19 @@ export default function Home() {
       >
         {/* 个人简介 */}
         <section className="text-center mb-12 md:mb-16 animate-fade-in-up">
-          <h1
-            className="font-bangers font-bold mb-4 md:mb-5"
-            style={{
-              fontSize: 'clamp(32px, 6vw, 56px)',
+          <h1 className="font-bold mb-4 md:mb-5" style={{ fontSize: 'clamp(32px, 6vw, 56px)', letterSpacing: 'clamp(1px, 0.5vw, 3px)', textShadow: '0 0 40px var(--dragon-orange-glow)', animation: 'glow-pulse 2s ease-in-out infinite' }}>
+            <span className="font-bangers" style={{
               background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 50%, #ff4444 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              letterSpacing: 'clamp(1px, 0.5vw, 3px)',
-              textShadow: '0 0 40px var(--dragon-orange-glow)',
-              animation: 'glow-pulse 2s ease-in-out infinite',
-            }}
-          >
-            Double兔
+            }}>Double</span>
+            <span className="font-zcool" style={{
+              background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 50%, #ff4444 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>兔</span>
           </h1>
           <p
             className="mx-auto mb-4 md:mb-6 px-2"

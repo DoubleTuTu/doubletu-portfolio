@@ -33,8 +33,9 @@ export default function Navbar() {
           >
             🐒
           </div>
-          <span className="font-bangers font-bold text-lg md:text-2xl bg-gradient-to-r from-[var(--dragon-gold)] to-[var(--dragon-orange)] bg-clip-text text-transparent tracking-wider">
-            Double兔
+          <span className="font-bold text-lg md:text-2xl bg-gradient-to-r from-[var(--dragon-gold)] to-[var(--dragon-orange)] bg-clip-text text-transparent tracking-wider">
+            <span className="font-bangers">Double</span>
+            <span className="font-zcool">兔</span>
           </span>
         </div>
 
