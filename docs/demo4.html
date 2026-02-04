@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double兔 - 七龙珠主题个人作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 高级深色配色方案 */
+            --bg-deep: #0a0a0a;
+            --bg-card: rgba(20, 20, 20, 0.9);
+            --bg-card-hover: rgba(30, 30, 30, 0.95);
+            --dragon-orange: #ff6b00;
+            --dragon-orange-glow: rgba(255, 107, 0, 0.6);
+            --dragon-gold: #ffd700;
+            --dragon-red: #cc0000;
+            --dragon-red-glow: rgba(204, 0, 0, 0.6);
+            --star-red: #cc0000;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-gold: rgba(255, 215, 0, 0.3);
+            --border-gold-hover: rgba(255, 215, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-deep);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 能量光晕背景 */
+        .energy-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 20% 20%, var(--dragon-orange-glow) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 107, 0, 0.1) 0%, transparent 60%);
+            animation: energy-pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes energy-pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* 网格线装饰 */
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255, 107, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 107, 0, 0.03) 1px, transparent 1px);
+            background-size: 100px 100px;
+        }
+
+        /* 七龙珠样式 - 橙色球体 + 红色星星 */
+        .dragon-ball {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd966 0%, #ff9500 40%, #e67300 70%, #cc5500 100%);
+            box-shadow:
+                inset -8px -8px 20px rgba(0, 0, 0, 0.5),
+                inset 3px 3px 10px rgba(255, 255, 255, 0.3),
+                inset 0 0 0 3px rgba(255, 200, 100, 0.2),
+                0 0 30px var(--dragon-orange-glow),
+                0 0 60px rgba(255, 107, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        /* 红色星星容器 */
+        .dragon-ball .stars {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            color: var(--star-red);
+            font-weight: bold;
+            text-shadow:
+                0 0 8px rgba(204, 0, 0, 0.9),
+                0 0 15px rgba(204, 0, 0, 0.6),
+                2px 2px 4px rgba(0, 0, 0, 0.8);
+            line-height: 1;
+        }
+
+        /* 不同数量的星星 */
+        .dragon-ball.star-1 .stars { font-size: 22px; letter-spacing: 0; }
+        .dragon-ball.star-2 .stars { font-size: 16px; letter-spacing: -2px; }
+        .dragon-ball.star-3 .stars { font-size: 14px; letter-spacing: -3px; }
+        .dragon-ball.star-4 .stars { font-size: 12px; letter-spacing: -4px; }
+        .dragon-ball.star-5 .stars { font-size: 11px; letter-spacing: -5px; }
+        .dragon-ball.star-6 .stars { font-size: 10px; letter-spacing: -6px; }
+        .dragon-ball.star-7 .stars { font-size: 9px; letter-spacing: -7px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        /* 龙珠位置 */
+        .dragon-ball:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .dragon-ball:nth-child(2) { top: 20%; right: 8%; animation-delay: 0.5s; }
+        .dragon-ball:nth-child(3) { top: 60%; left: 3%; animation-delay: 1s; }
+        .dragon-ball:nth-child(4) { top: 70%; right: 5%; animation-delay: 1.5s; }
+        .dragon-ball:nth-child(5) { top: 40%; left: 92%; animation-delay: 2s; }
+        .dragon-ball:nth-child(6) { top: 85%; left: 10%; animation-delay: 2.5s; }
+        .dragon-ball:nth-child(7) { top: 50%; right: 3%; animation-delay: 3s; }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-gold);
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-left:hover {
+            transform: scale(1.02);
+        }
+
+        .goku-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #e67300 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 20px var(--dragon-orange-glow);
+        }
+
+        .site-name {
+            font-family: 'Bangers', cursive;
+            font-weight: 700;
+            font-size: 28px;
+            background: linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        /* 七龙珠 Logo - 中间位置 */
+        .dragon-ball-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .logo-ball {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd966 0%, #ff9500 40%, #e67300 70%, #cc5500 100%);
+            box-shadow:
+                inset -5px -5px 15px rgba(0, 0, 0, 0.5),
+                inset 2px 2px 8px rgba(255, 255, 255, 0.3),
+                0 0 20px var(--dragon-orange-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo-ball .stars {
+            color: var(--star-red);
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow:
+                0 0 6px rgba(204, 0, 0, 0.9),
+                0 0 10px rgba(204, 0, 0, 0.6),
+                1px 1px 3px rgba(0, 0, 0, 0.8);
+            letter-spacing: -4px;
+        }
+
+        .logo-text {
+            font-family: 'Bangers', cursive;
+            font-weight: 700;
+            font-size: 32px;
+            background: linear-gradient(180deg, #ffd700 0%, var(--dragon-orange) 50%, var(--dragon-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 4px;
+            text-shadow: 0 0 30px var(--dragon-orange-glow);
+            filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.5));
+        }
+
+        .logo-japanese {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--dragon-red);
+            letter-spacing: 2px;
+            margin-left: 4px;
+            text-shadow: 0 0 10px var(--dragon-red-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .nav-link {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            position: relative;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--dragon-orange), var(--dragon-gold));
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--dragon-gold);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 主内容 */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 60px;
+        }
+
+        /* 个人简介区域 */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-name {
+            font-family: 'Bangers', cursive;
+            font-weight: 700;
+            font-size: 56px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 50%, #ff4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px var(--dragon-orange-glow);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .profile-tagline {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .profile-tagline span {
+            display: inline-block;
+            padding: 0 12px;
+        }
+
+        .profile-goal {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dragon-gold);
+            margin-bottom: 12px;
+        }
+
+        .profile-contact {
+            font-size: 16px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* 项目卡片网格 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .projects-grid .project-card:nth-child(4),
+        .projects-grid .project-card:nth-child(5) {
+            grid-column: span 1;
+        }
+
+        .projects-grid .project-card:nth-child(4) {
+            grid-column-start: 1;
+        }
+
+        .projects-grid .project-card:nth-child(5) {
+            grid-column-start: 2;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease backwards;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .project-card:nth-child(4) { animation-delay: 0.4s; }
+        .project-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-gold-hover);
+            box-shadow:
+                0 20px 40px rgba(255, 107, 0, 0.3),
+                0 0 30px var(--dragon-orange-glow);
+        }
+
+        .card-character {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .card-character {
+            opacity: 0.8;
+            transform: scale(1.2);
+        }
+
+        .project-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-weight: 700;
+            font-size: 22px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            padding-right: 40px;
+        }
+
+        .project-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .card-arrow {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: var(--dragon-gold);
+            font-size: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .card-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* AI 机器人浮窗 */
+        .ai-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .ai-widget-collapsed {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #e67300 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 0 30px var(--dragon-orange-glow);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 30px var(--dragon-orange-glow);
+            }
+            50% {
+                box-shadow: 0 0 50px var(--dragon-orange-glow), 0 0 80px rgba(255, 107, 0, 0.4);
+            }
+        }
+
+        .ai-widget-collapsed:hover {
+            transform: scale(1.15);
+        }
+
+        /* 底部版权 */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border-gold);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+
+            .nav-link {
+                font-size: 14px;
+            }
+
+            .dragon-ball-logo {
+                display: none;
+            }
+
+            .main-content {
+                padding: 100px 20px 40px;
+            }
+
+            .profile-name {
+                font-size: 36px;
+            }
+
+            .profile-tagline {
+                font-size: 14px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .projects-grid .project-card:nth-child(4),
+            .projects-grid .project-card:nth-child(5) {
+                grid-column: span 1;
+                grid-column-start: auto;
+            }
+
+            .project-card {
+                padding: 20px;
+            }
+
+            .dragon-ball {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 能量光晕背景 -->
+    <div class="energy-glow"></div>
+
+    <!-- 网格线装饰 -->
+    <div class="grid-lines"></div>
+
+    <!-- 七颗龙珠 -->
+    <div class="dragon-ball star-1"><div class="stars">★</div></div>
+    <div class="dragon-ball star-2"><div class="stars">★★</div></div>
+    <div class="dragon-ball star-3"><div class="stars">★★★</div></div>
+    <div class="dragon-ball star-4"><div class="stars">★★★★</div></div>
+    <div class="dragon-ball star-5"><div class="stars">★★★★★</div></div>
+    <div class="dragon-ball star-6"><div class="stars">★★★★★★</div></div>
+    <div class="dragon-ball star-7"><div class="stars">★★★★★★★</div></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="goku-avatar">🐒</div>
+            <span class="site-name">Double兔</span>
+        </div>
+
+        <!-- 七龙珠 Logo - 居中 -->
+        <div class="dragon-ball-logo">
+            <div class="logo-ball">
+                <div class="stars">★★★★</div>
+            </div>
+            <span class="logo-text">DRAGON BALL</span>
+            <span class="logo-japanese">ドラゴンボール</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#" class="nav-link">首页</a>
+            <a href="#" class="nav-link">文章</a>
+            <a href="#" class="nav-link">建议</a>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 个人简介 -->
+        <section class="profile-section">
+            <h1 class="profile-name">Double兔</h1>
+            <p class="profile-tagline">
+                <span>VibeCoding 爱好者</span>
+                <span>|</span>
+                <span>用七龙珠的热情敲代码</span>
+                <span>|</span>
+                <span>极简主义信徒</span>
+            </p>
+            <p class="profile-goal">✨ 正在开发：用 AI 让世界更有趣</p>
+            <p class="profile-goal">目标：集齐七颗龙珠，召唤一个完美的作品集</p>
+            <p class="profile-contact">
+                📞 QQ/微信: 118071452
+            </p>
+        </section>
+
+        <!-- 项目卡片 -->
+        <section class="projects-grid">
+            <div class="project-card">
+                <div class="card-character">🐒</div>
+                <h3 class="project-title">极简记账本</h3>
+                <p class="project-desc">简洁高效的记账工具</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">🧍</div>
+                <h3 class="project-title">个人工具主页</h3>
+                <p class="project-desc">常用工具集合</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">👽</div>
+                <h3 class="project-title">极简海报编辑器</h3>
+                <p class="project-desc">快速创建海报</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">⚔</div>
+                <h3 class="project-title">AI 漫剧剧本</h3>
+                <p class="project-desc">一键生成 AI 漫剧剧本</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">🔧</div>
+                <h3 class="project-title">自由画布 AI 对话</h3>
+                <p class="project-desc">多模型 AI 对话工具</p>
+                <div class="card-arrow">→</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AI 机器人浮窗 -->
+    <div class="ai-widget">
+        <div class="ai-widget-collapsed">🐒</div>
+    </div>
+
+    <!-- 底部版权 -->
+    <footer class="footer">
+        七龙珠角色仅用于个人展示，非商业用途
+    </footer>
+</body>
+</html>

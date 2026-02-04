@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double兔 - 七龙珠主题个人作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Bangers&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dragon-orange: #FF6B00;
+            --dragon-orange-bright: #FF8C00;
+            --dragon-gold: #FFD700;
+            --dragon-blue: #0066FF;
+            --dragon-dark: #1A1A1A;
+            --dragon-cream: #FFF5E6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, var(--dragon-orange-bright) 50%, var(--dragon-gold) 100%);
+            min-height: 100vh;
+            color: var(--dragon-dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 能量波浪背景 */
+        .energy-wave {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 0, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 102, 255, 0.2) 0%, transparent 40%);
+        }
+
+        /* 七龙珠球装饰 */
+        .dragon-ball {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            box-shadow:
+                inset -10px -10px 20px rgba(255, 140, 0, 0.5),
+                inset 10px 10px 20px rgba(255, 215, 0, 0.8),
+                0 10px 30px rgba(255, 165, 0, 0.6);
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        .dragon-ball::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: rgba(200, 50, 0, 0.4);
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+
+        .dragon-ball::after {
+            content: '★';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #C41E3A;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(196, 30, 58, 0.8);
+        }
+
+        .dragon-ball.star-1::after { content: '★'; }
+        .dragon-ball.star-2::after { content: '★★'; }
+        .dragon-ball.star-3::after { content: '★★★'; }
+        .dragon-ball.star-4::after { content: '★★★★'; }
+        .dragon-ball.star-5::after { content: '★★★★★'; }
+        .dragon-ball.star-6::after { content: '★★★★★★'; }
+        .dragon-ball.star-7::after { content: '★★★★★★★'; }
+
+        .ball-1 { top: 100px; left: 5%; width: 40px; height: 40px; animation: float 6s ease-in-out infinite; }
+        .ball-2 { top: 200px; right: 8%; width: 50px; height: 50px; animation: float 8s ease-in-out infinite 1s; }
+        .ball-3 { top: 60%; left: 3%; width: 35px; height: 35px; animation: float 7s ease-in-out infinite 2s; }
+        .ball-4 { top: 70%; right: 5%; width: 45px; height: 45px; animation: float 9s ease-in-out infinite 0.5s; }
+        .ball-5 { top: 40%; left: 8%; width: 38px; height: 38px; animation: float 6.5s ease-in-out infinite 1.5s; }
+        .ball-6 { top: 85%; left: 15%; width: 42px; height: 42px; animation: float 7.5s ease-in-out infinite 2.5s; }
+        .ball-7 { top: 30%; right: 15%; width: 48px; height: 48px; animation: float 8.5s ease-in-out infinite 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* 能量闪电 */
+        .lightning {
+            position: absolute;
+            width: 3px;
+            height: 100px;
+            background: linear-gradient(180deg, transparent, var(--dragon-gold), transparent);
+            opacity: 0;
+            animation: lightning-strike 4s infinite;
+        }
+
+        @keyframes lightning-strike {
+            0%, 90%, 100% { opacity: 0; }
+            92%, 94% { opacity: 1; }
+            93%, 95% { opacity: 0.5; }
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 12px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 30px rgba(255, 107, 0, 0.3);
+            z-index: 1000;
+            border-bottom: 4px solid var(--dragon-orange);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-left:hover {
+            transform: scale(1.05);
+        }
+
+        .goku-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #FF4500 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 5px 20px rgba(255, 69, 0, 0.5);
+            border: 3px solid var(--dragon-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goku-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .site-name {
+            font-family: 'Bangers', cursive;
+            font-size: 32px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #FF4500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(255, 107, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-size: 18px;
+            color: var(--dragon-dark);
+            text-decoration: none;
+            position: relative;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .nav-link:hover {
+            background: var(--dragon-orange);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        /* 主内容 */
+        .main-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 40px 60px;
+        }
+
+        /* 个人简介区域 */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(255, 107, 0, 0.3);
+            border: 4px solid var(--dragon-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            animation: rotate-bg 20s linear infinite;
+        }
+
+        @keyframes rotate-bg {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-name {
+            font-family: 'Bangers', cursive;
+            font-size: 64px;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #FF4500 50%, var(--dragon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 3px 3px 6px rgba(255, 107, 0, 0.3);
+            letter-spacing: 4px;
+        }
+
+        .profile-tagline {
+            font-size: 18px;
+            color: #555;
+            line-height: 2;
+            margin-bottom: 20px;
+        }
+
+        .profile-tagline span {
+            display: inline-block;
+            padding: 0 16px;
+            font-weight: 500;
+        }
+
+        .profile-goal {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dragon-orange);
+            margin-bottom: 16px;
+        }
+
+        .profile-contact {
+            font-size: 16px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        /* 项目卡片网格 */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        .projects-grid .project-card:nth-child(4),
+        .projects-grid .project-card:nth-child(5) {
+            grid-column: span 1;
+        }
+
+        .projects-grid .project-card:nth-child(4) {
+            grid-column-start: 1;
+        }
+
+        .projects-grid .project-card:nth-child(5) {
+            grid-column-start: 2;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(255, 107, 0, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--dragon-orange), var(--dragon-gold));
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: scale(1.08) rotate(-1deg);
+            box-shadow: 0 25px 60px rgba(255, 107, 0, 0.4);
+            border-color: var(--dragon-gold);
+        }
+
+        .project-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-character {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 48px;
+            opacity: 0.25;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .card-character {
+            opacity: 0.5;
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .project-title {
+            font-family: 'ZCOOL KuaiLe', cursive;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--dragon-dark);
+            margin-bottom: 12px;
+            padding-right: 50px;
+        }
+
+        .project-desc {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .card-arrow {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--dragon-orange), var(--dragon-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .project-card:hover .card-arrow {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* AI 机器人浮窗 */
+        .ai-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+
+        .ai-widget-collapsed {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--dragon-orange) 0%, #FF4500 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.5);
+            border: 4px solid var(--dragon-gold);
+            transition: all 0.3s ease;
+            animation: ai-pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-widget-collapsed::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes ai-pulse {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(255, 69, 0, 0.5);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 15px 40px rgba(255, 69, 0, 0.7);
+                transform: scale(1.05);
+            }
+        }
+
+        .ai-widget-collapsed:hover {
+            transform: scale(1.15);
+        }
+
+        /* 底部版权 */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: white;
+            font-size: 13px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 20px;
+            }
+
+            .site-name {
+                font-size: 24px;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+
+            .nav-link {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+
+            .main-content {
+                padding: 100px 20px 40px;
+            }
+
+            .profile-section {
+                padding: 30px 20px;
+            }
+
+            .profile-name {
+                font-size: 36px;
+            }
+
+            .profile-tagline {
+                font-size: 14px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .projects-grid .project-card:nth-child(4),
+            .projects-grid .project-card:nth-child(5) {
+                grid-column: span 1;
+                grid-column-start: auto;
+            }
+
+            .project-card {
+                padding: 24px;
+            }
+
+            .dragon-ball {
+                width: 30px;
+                height: 30px;
+            }
+
+            .ball-1 { top: 80px; width: 25px; height: 25px; }
+            .ball-2 { top: 150px; width: 30px; height: 30px; }
+            .ball-3 { display: none; }
+            .ball-4 { display: none; }
+            .ball-5 { display: none; }
+            .ball-6 { display: none; }
+            .ball-7 { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 能量波浪背景 -->
+    <div class="energy-wave"></div>
+
+    <!-- 七龙珠装饰 -->
+    <div class="dragon-ball star-1 ball-1"></div>
+    <div class="dragon-ball star-2 ball-2"></div>
+    <div class="dragon-ball star-3 ball-3"></div>
+    <div class="dragon-ball star-4 ball-4"></div>
+    <div class="dragon-ball star-5 ball-5"></div>
+    <div class="dragon-ball star-6 ball-6"></div>
+    <div class="dragon-ball star-7 ball-7"></div>
+
+    <!-- 能量闪电 -->
+    <div class="lightning" style="top: 15%; left: 10%;"></div>
+    <div class="lightning" style="top: 45%; right: 12%; animation-delay: 2s;"></div>
+    <div class="lightning" style="top: 75%; left: 20%; animation-delay: 1s;"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="goku-avatar">🐒</div>
+            <span class="site-name">Double兔</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link">首页</a>
+            <a href="#" class="nav-link">文章</a>
+            <a href="#" class="nav-link">建议</a>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <!-- 个人简介 -->
+        <section class="profile-section">
+            <div class="profile-content">
+                <h1 class="profile-name">Double兔</h1>
+                <p class="profile-tagline">
+                    <span>VibeCoding 爱好者</span>
+                    <span>|</span>
+                    <span>用七龙珠的热情敲代码</span>
+                    <span>|</span>
+                    <span>极简主义信徒</span>
+                </p>
+                <p class="profile-goal">⚡ 正在开发：用 AI 让世界更有趣</p>
+                <p class="profile-goal">🐉 目标：集齐七颗龙珠，召唤一个完美的作品集</p>
+                <p class="profile-contact">
+                    📞 QQ/微信: 118071452
+                </p>
+            </div>
+        </section>
+
+        <!-- 项目卡片 -->
+        <section class="projects-grid">
+            <div class="project-card">
+                <div class="card-character">🐒</div>
+                <h3 class="project-title">极简记账本</h3>
+                <p class="project-desc">简洁高效的记账工具</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">🧍</div>
+                <h3 class="project-title">个人工具主页</h3>
+                <p class="project-desc">常用工具集合</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">👽</div>
+                <h3 class="project-title">极简海报编辑器</h3>
+                <p class="project-desc">快速创建海报</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">⚔</div>
+                <h3 class="project-title">AI 漫剧剧本</h3>
+                <p class="project-desc">一键生成 AI 漫剧剧本</p>
+                <div class="card-arrow">→</div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-character">🔧</div>
+                <h3 class="project-title">自由画布 AI 对话</h3>
+                <p class="project-desc">多模型 AI 对话工具</p>
+                <div class="card-arrow">→</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- AI 机器人浮窗 -->
+    <div class="ai-widget">
+        <div class="ai-widget-collapsed">🐒</div>
+    </div>
+
+    <!-- 底部版权 -->
+    <footer class="footer">
+        七龙珠角色仅用于个人展示，非商业用途
+    </footer>
+</body>
+</html>
