@@ -24,7 +24,7 @@
 }
 
 body {
-  font-family: var(--font-noto-sans), 'Noto Sans SC', sans-serif;
+  font-family: var(--font-noto-sans), 'Noto Sans SC', sans-serif !important;
   background: var(--bg-deep);
   min-height: 100vh;
   color: var(--text-primary);
@@ -33,11 +33,11 @@ body {
 
 /* 字体类 - 精确匹配 demo3.html */
 .font-bangers {
-  font-family: var(--font-bangers), 'Bangers', cursive;
+  font-family: var(--font-bangers), 'Bangers', cursive !important;
 }
 
 .font-zcool {
-  font-family: var(--font-zcool), 'ZCOOL KuaiLe', cursive;
+  font-family: var(--font-zcool), 'ZCOOL KuaiLe', cursive !important;
 }
 
 /* 能量光晕动画 */
