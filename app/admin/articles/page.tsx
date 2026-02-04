@@ -1,19 +1,42 @@
+'use client';
+
 import { DragonBall, Navbar } from '../../components';
-import { getAllArticles } from '../../lib/articles';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-export const metadata = {
-  title: '文章管理 - Double兔 作品集',
-  description: '管理您的文章',
-};
+interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  viewCount: number;
+  publishedAt: string;
+}
 
-export default async function AdminArticlesPage() {
-  const articles = await getAllArticles();
+export default function AdminArticlesPage() {
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // 按发布时间倒序排列
-  const sortedArticles = articles.sort((a, b) =>
-    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = async () => {
+    try {
+      const response = await fetch('/api/articles');
+      if (response.ok) {
+        const data = await response.json();
+        // 按发布时间倒序排列
+        const sorted = data.sort((a: Article, b: Article) =>
+          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        );
+        setArticles(sorted);
+      }
+    } catch (error) {
+      console.error('Failed to fetch articles:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // 删除文章的函数（客户端调用）
   const deleteArticle = async (slug: string, title: string) => {
@@ -32,7 +55,8 @@ export default async function AdminArticlesPage() {
 
       if (response.ok) {
         alert('文章删除成功！');
-        window.location.reload();
+        // 重新获取文章列表
+        fetchArticles();
       } else {
         const error = await response.json();
         alert(`删除失败：${error.message || '未知错误'}`);
@@ -139,7 +163,14 @@ export default async function AdminArticlesPage() {
         </div>
 
         {/* 文章列表 */}
-        {sortedArticles.length === 0 ? (
+        {loading ? (
+          <div
+            className="text-center py-16 rounded-lg border border-[var(--border-gold)] animate-fade-in-up"
+            style={{ background: 'var(--bg-card)' }}
+          >
+            <p style={{ color: 'var(--text-secondary)' }}>加载中...</p>
+          </div>
+        ) : articles.length === 0 ? (
           <div
             className="text-center py-16 rounded-lg border border-[var(--border-gold)] animate-fade-in-up"
             style={{ background: 'var(--bg-card)' }}
@@ -149,7 +180,7 @@ export default async function AdminArticlesPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {sortedArticles.map((article, index) => (
+            {articles.map((article, index) => (
               <div
                 key={article.id}
                 className="animate-fade-in-up opacity-0"
