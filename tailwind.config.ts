@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        bangers: ['var(--font-bangers)', 'Bangers', 'cursive'],
+        zcool: ['var(--font-zcool)', 'ZCOOL KuaiLe', 'cursive'],
+        noto: ['var(--font-noto-sans)', 'Noto Sans SC', 'sans-serif'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
