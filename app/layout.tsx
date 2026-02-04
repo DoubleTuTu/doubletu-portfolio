@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Bangers, ZCOOL_KuaiLe, Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
 
-// 配置字体
+// 配置字体 - 精确匹配 demo3.html
 const bangers = Bangers({
   weight: "400",
   subsets: ["latin"],
