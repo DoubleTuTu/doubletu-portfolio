@@ -1,6 +1,6 @@
 {
   "name": "dragonball-portfolio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,9 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
+    "mammoth": "^1.11.0",
     "next": "^15.2.9",
+    "pdf2json": "^4.0.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

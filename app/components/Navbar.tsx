@@ -11,8 +11,8 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: '首页', href: '#' },
-    { name: '文章', href: '#' },
+    { name: '首页', href: '/' },
+    { name: '文章', href: '/articles' },
     { name: '建议', href: '#' },
   ];
 

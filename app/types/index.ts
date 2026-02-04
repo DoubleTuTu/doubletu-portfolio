@@ -14,3 +14,34 @@ export interface DragonBallProps {
   className?: string;
   style?: React.CSSProperties;
 }
+
+/**
+ * 文章类型定义（V0.2 新增）
+ */
+
+export interface Article {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  viewCount: number;
+  publishedAt: string; // ISO 8601
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ArticleListItem {
+  id: string;
+  title: string;
+  slug: string;
+  viewCount: number;
+  publishedAt: string;
+}
+
+export interface ArticleDetail extends Article {
+  // 继承所有字段
+}
+
+export interface ArticlesData {
+  articles: Article[];
+}
