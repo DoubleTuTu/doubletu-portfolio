@@ -99,3 +99,37 @@ body {
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
 }
+
+/* 角色 emoji 弹跳动画（V0.3 新增） */
+@keyframes character-bounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+   25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.character-emoji:hover {
+  animation: character-bounce 0.5s ease-in-out;
+}
+
+/* 能量光晕脉冲动画（V0.3 新增） */
+@keyframes energy-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--dragon-orange),
+                0 0 40px rgba(255, 107, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--dragon-gold),
+                0 0 60px var(--dragon-orange),
+                0 0 80px rgba(255, 215, 0, 0.5);
+  }
+}
+
+.energy-glow {
+  animation: energy-pulse-glow 2s ease-in-out infinite;
+}

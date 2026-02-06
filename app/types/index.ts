@@ -7,6 +7,7 @@ export interface Project {
   title: string;
   description: string;
   link: string;
+  catchphrase?: string; // 角色口头禅（V0.3 新增）
 }
 
 export interface DragonBallProps {

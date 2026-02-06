@@ -9,6 +9,18 @@ interface Message {
   timestamp: Date;
 }
 
+interface APIMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+const STORAGE_KEY = 'chat-history';
+const HEIGHT_STORAGE_KEY = 'chat-widget-height';
+
+const DEFAULT_HEIGHT = 500;
+const MIN_HEIGHT = 300;
+const MAX_HEIGHT = 800;
+
 export default function AIWidget() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -23,18 +35,124 @@ export default function AIWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [chatHeight, setChatHeight] = useState(DEFAULT_HEIGHT);
+  const [isResizing, setIsResizing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatBoxRef = useRef<HTMLDivElement>(null);
+
+  // 从 localStorage 加载聊天历史和高度
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const historyMessages = parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp),
+        }));
+        setMessages(historyMessages);
+      }
+
+      // 加载保存的高度
+      const savedHeight = localStorage.getItem(HEIGHT_STORAGE_KEY);
+      if (savedHeight) {
+        const height = parseInt(savedHeight, 10);
+        if (height >= MIN_HEIGHT && height <= MAX_HEIGHT) {
+          setChatHeight(height);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    }
+  }, []);
+
+  // 保存聊天历史到 localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch (error) {
+      console.error('Failed to save chat history:', error);
+    }
+  }, [messages]);
+
+  // 保存高度到 localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(HEIGHT_STORAGE_KEY, chatHeight.toString());
+    } catch (error) {
+      console.error('Failed to save chat height:', error);
+    }
+  }, [chatHeight]);
 
   // 自动滚动到底部
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // 处理拖拽调整大小
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newHeight = window.innerHeight - e.clientY;
+      const clampedHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, newHeight));
+      setChatHeight(clampedHeight);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
+
+  // 处理触摸拖拽（移动端）
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const newHeight = window.innerHeight - e.touches[0].clientY;
+      const clampedHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, newHeight));
+      setChatHeight(clampedHeight);
+    };
+
+    const handleTouchEnd = () => {
+      setIsResizing(false);
+    };
+
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isResizing]);
+
   // 显示 Toast 提示
   const showToastMsg = (msg: string) => {
     setToastMessage(msg);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
+  };
+
+  // 清空聊天历史
+  const clearHistory = () => {
+    setMessages([
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: '你好！我是 Double兔 的 AI 助手，有什么可以帮你的吗？',
+        timestamp: new Date(),
+      },
+    ]);
+    showToastMsg('聊天记录已清空');
   };
 
   // 发送消息
@@ -49,6 +167,14 @@ export default function AIWidget() {
       return;
     }
 
+    // 构建发送给 API 的历史记录（排除欢迎消息，只保留真实对话）
+    const apiHistory: APIMessage[] = messages
+      .filter((m) => m.id !== 'welcome')
+      .map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+
     // 添加用户消息
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -61,11 +187,14 @@ export default function AIWidget() {
     setIsLoading(true);
 
     try {
-      // 调用 API
+      // 调用 API，发送历史记录
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmedInput }),
+        body: JSON.stringify({
+          message: trimmedInput,
+          history: apiHistory,
+        }),
       });
 
       if (!response.ok) {
@@ -111,18 +240,43 @@ export default function AIWidget() {
       {/* 展开状态 */}
       {isExpanded && (
         <div
-          className="fixed z-50 rounded-2xl overflow-hidden backdrop-blur-xl transition-all duration-300"
+          ref={chatBoxRef}
+          className="fixed z-50 rounded-2xl overflow-hidden backdrop-blur-xl flex flex-col"
           style={{
             bottom: 'clamp(16px, 3vw, 30px)',
             right: 'clamp(16px, 3vw, 30px)',
             left: 'clamp(16px, 3vw, auto)',
             width: 'clamp(280px, 90vw, 350px)',
-            height: 'clamp(350px, 60vh, 450px)',
+            height: `${chatHeight}px`,
             background: 'var(--bg-card)',
             border: '1px solid var(--border-gold)',
             boxShadow: '0 20px 40px rgba(255, 107, 0, 0.3)',
           }}
         >
+          {/* 拖拽调整大小手柄 */}
+          <div
+            onMouseDown={() => setIsResizing(true)}
+            onTouchStart={() => setIsResizing(true)}
+            className="cursor-ns-resize hover:bg-[var(--dragon-orange)]/20 transition-colors"
+            style={{
+              height: '8px',
+              background: 'linear-gradient(135deg, var(--dragon-gold) 0%, var(--dragon-orange) 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            title="拖拽调整大小"
+          >
+            <div
+              style={{
+                width: '40px',
+                height: '3px',
+                background: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: '2px',
+              }}
+            />
+          </div>
+
           {/* 头部 */}
           <div
             className="flex items-center gap-2 md:gap-3"
@@ -147,6 +301,14 @@ export default function AIWidget() {
               <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>在线</div>
             </div>
             <button
+              onClick={clearHistory}
+              className="text-white hover:text-[var(--dragon-gold)] transition-colors text-sm flex-shrink-0"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+              title="清空聊天记录"
+            >
+              🗑️
+            </button>
+            <button
               onClick={() => setIsExpanded(false)}
               className="text-white hover:text-[var(--dragon-gold)] transition-colors text-lg md:text-xl flex-shrink-0"
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
@@ -157,9 +319,8 @@ export default function AIWidget() {
 
           {/* 聊天区域 */}
           <div
-            className="overflow-y-auto px-3 md:px-4"
+            className="overflow-y-auto px-3 md:px-4 flex-1"
             style={{
-              height: 'calc(100% - clamp(120px, 30vw, 150px))',
               display: 'flex',
               flexDirection: 'column',
               gap: '10px 12px'
@@ -226,7 +387,6 @@ export default function AIWidget() {
 
           {/* 输入区域 */}
           <div
-            className="absolute bottom-0 left-0 right-0"
             style={{
               padding: '12px 16px',
               borderTop: '1px solid var(--border-gold)',

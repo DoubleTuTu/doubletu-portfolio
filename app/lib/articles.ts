@@ -111,6 +111,27 @@ export async function deleteArticle(id: string): Promise<boolean> {
 }
 
 /**
+ * 更新文章标题
+ */
+export async function updateArticleTitle(
+  id: string,
+  newTitle: string
+): Promise<Article | null> {
+  const articles = await getAllArticles();
+  const articleIndex = articles.findIndex(a => a.id === id);
+
+  if (articleIndex === -1) {
+    return null; // 文章不存在
+  }
+
+  articles[articleIndex].title = newTitle;
+  articles[articleIndex].updatedAt = new Date().toISOString();
+
+  await saveArticles(articles);
+  return articles[articleIndex];
+}
+
+/**
  * 保存文章到文件
  */
 async function saveArticles(articles: Article[]): Promise<void> {

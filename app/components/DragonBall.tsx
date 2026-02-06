@@ -1,3 +1,5 @@
+'use client';
+
 interface DragonBallProps {
   stars: number;
   className?: string;
@@ -23,7 +25,7 @@ export default function DragonBall({ stars, className = '', style }: DragonBallP
 
   return (
     <div
-      className={`absolute rounded-full flex items-center justify-center animate-float ${className}`}
+      className={`absolute rounded-full flex items-center justify-center animate-float dragonball ${className}`}
       style={{
         width: '50px',
         height: '50px',
@@ -33,6 +35,7 @@ export default function DragonBall({ stars, className = '', style }: DragonBallP
           'inset 5px 5px 15px rgba(255, 255, 255, 0.3), ' +
           '0 0 30px var(--dragon-orange-glow), ' +
           '0 0 60px rgba(255, 107, 0, 0.3)',
+        transition: 'all 0.3s ease',
         ...style,
       }}
     >
@@ -48,6 +51,19 @@ export default function DragonBall({ stars, className = '', style }: DragonBallP
       >
         {starsText}
       </span>
+
+      <style jsx>{`
+        .dragonball:hover {
+          transform: scale(1.15) rotate(10deg);
+          box-shadow:
+            inset -5px -5px 15px rgba(0, 0, 0, 0.4),
+            inset 5px 5px 15px rgba(255, 255, 255, 0.3),
+            0 0 50px var(--dragon-gold),
+            0 0 80px var(--dragon-orange),
+            0 0 100px rgba(255, 215, 0, 0.6);
+          cursor: pointer;
+        }
+      `}</style>
     </div>
   );
 }

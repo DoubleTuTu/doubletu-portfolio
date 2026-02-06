@@ -63,8 +63,45 @@ export default function AdminArticlesPage() {
     }
   };
 
+  // 编辑文章标题的函数
+  const editArticleTitle = async (id: string, currentTitle: string) => {
+    const newTitle = prompt('请输入新的文章标题：', currentTitle);
+    if (newTitle === null || newTitle.trim() === '') {
+      return; // 用户取消或输入为空
+    }
+
+    try {
+      const response = await fetch('/api/articles', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, title: newTitle.trim() }),
+      });
+
+      if (response.ok) {
+        alert('标题修改成功！');
+        // 重新获取文章列表
+        fetchArticles();
+      } else {
+        const error = await response.json();
+        alert(`修改失败：${error.error || '未知错误'}`);
+      }
+    } catch (error) {
+      alert(`修改失败：${error instanceof Error ? error.message : '未知错误'}`);
+    }
+  };
+
   return (
     <main className="min-h-screen relative">
+      <style jsx>{`
+        .article-item {
+          transition: all 0.3s ease;
+        }
+        .article-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(255, 107, 0, 0.2);
+          border-color: var(--border-gold-hover);
+        }
+      `}</style>
       {/* 能量光晕背景 */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div
@@ -180,7 +217,7 @@ export default function AdminArticlesPage() {
             {articles.map((article, index) => (
               <div
                 key={article.id}
-                className="animate-fade-in-up opacity-0"
+                className="animate-fade-in-up opacity-0 article-item"
                 style={{
                   animationDelay: `${index * 100}ms`,
                   background: 'var(--bg-card)',
@@ -191,25 +228,14 @@ export default function AdminArticlesPage() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   gap: '20px',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(255, 107, 0, 0.2)';
-                  e.currentTarget.style.borderColor = 'var(--border-gold-hover)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = 'var(--border-gold)';
                 }}
               >
                 {/* 文章信息 */}
                 <div className="flex-1 min-w-0">
                   <Link
                     href={`/articles/${article.slug}`}
-                    className="font-zcool font-bold text-lg md:text-xl mb-2 hover:text-[var(--dragon-gold)] transition-colors block"
-                    style={{ color: 'var(--text-primary)' }}
+                    className="font-zcool font-bold text-lg md:text-xl mb-2 block hover:text-[var(--dragon-gold)] transition-colors"
+                    style={{ color: 'var(--text-primary)', textDecoration: 'none' }}
                   >
                     {article.title}
                   </Link>
@@ -225,16 +251,18 @@ export default function AdminArticlesPage() {
 
                 {/* 操作按钮 */}
                 <div className="flex gap-2">
-                  <Link
-                    href={`/admin/edit/${article.slug}`}
+                  <button
+                    onClick={() => editArticleTitle(article.id, article.title)}
                     className="px-4 py-2 rounded-lg font-zcool font-bold text-sm transition-all hover:scale-105"
                     style={{
                       background: 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
                       color: '#fff',
+                      border: 'none',
+                      cursor: 'pointer',
                     }}
                   >
-                    ✏️ 编辑
-                  </Link>
+                    ✏️ 修改标题
+                  </button>
                   <button
                     onClick={() => deleteArticle(article.id, article.title)}
                     className="px-4 py-2 rounded-lg font-zcool font-bold text-sm transition-all hover:scale-105"

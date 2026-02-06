@@ -4,6 +4,7 @@ import {
   getArticleListItems,
   createArticle,
   deleteArticle,
+  updateArticleTitle,
   generateUniqueSlug,
 } from '../../lib/articles';
 
@@ -111,6 +112,40 @@ export async function DELETE(request: NextRequest) {
     console.error('Delete article error:', error);
     return NextResponse.json(
       { error: '删除文章失败' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PATCH /api/articles - 更新文章标题
+ */
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { id, title } = body;
+
+    if (!id || !title) {
+      return NextResponse.json(
+        { error: '缺少文章 ID 或新标题' },
+        { status: 400 }
+      );
+    }
+
+    const updatedArticle = await updateArticleTitle(id, title);
+
+    if (!updatedArticle) {
+      return NextResponse.json(
+        { error: '文章不存在' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ article: updatedArticle });
+  } catch (error) {
+    console.error('Update article error:', error);
+    return NextResponse.json(
+      { error: '更新文章失败' },
       { status: 500 }
     );
   }
