@@ -1,45 +1,8 @@
 import { DragonBall, Navbar, ProjectCard, AIWidget } from './components';
-import type { Project } from './types';
+import { getAllProjects } from './lib/projects';
 
-const PROJECTS: Project[] = [
-  {
-    emoji: '🐒',
-    title: '极简记账本',
-    description: '简洁高效的记账工具',
-    link: 'https://minimal-ledger.vercel.app/',
-    catchphrase: '龟派气功！💥',
-  },
-  {
-    emoji: '🧍',
-    title: '个人工具主页',
-    description: '常用工具集合',
-    link: 'https://homepage-personal-tools.vercel.app/',
-    catchphrase: '终极闪光！⚡',
-  },
-  {
-    emoji: '👽',
-    title: '极简海报编辑器',
-    description: '快速创建海报',
-    link: 'https://poster-editor-delta.vercel.app/',
-    catchphrase: '魔贯光杀炮！🌟',
-  },
-  {
-    emoji: '⚔',
-    title: 'AI 漫剧剧本',
-    description: '一键生成 AI 漫剧剧本',
-    link: 'https://app-90i4helcqosh.appmiaoda.com/',
-    catchphrase: '燃烧攻击！🔥',
-  },
-  {
-    emoji: '🔧',
-    title: '自由画布 AI 对话',
-    description: '多模型 AI 对话工具',
-    link: 'https://12f8be26246f45e9813b7f2d41dc8d35-latest.preview.enter.pro/',
-    catchphrase: '胶囊科技！💊',
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const PROJECTS = await getAllProjects();
   return (
     <main className="min-h-screen relative">
       {/* 能量光晕背景 */}
@@ -136,12 +99,13 @@ export default function Home() {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10">
           {PROJECTS.map((project, index) => (
             <ProjectCard
-              key={index}
+              key={project.id}
               emoji={project.emoji}
               title={project.title}
               description={project.description}
               link={project.link}
               catchphrase={project.catchphrase}
+              imageUrl={project.imageUrl}
               delay={(index + 1) * 100}
             />
           ))}

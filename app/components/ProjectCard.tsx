@@ -9,10 +9,11 @@ interface ProjectCardProps {
   description: string;
   link?: string;
   catchphrase?: string;
+  imageUrl?: string;
   delay: number;
 }
 
-export default function ProjectCard({ emoji, title, description, link, catchphrase, delay }: ProjectCardProps) {
+export default function ProjectCard({ emoji, title, description, link, catchphrase, imageUrl, delay }: ProjectCardProps) {
   const [showBubble, setShowBubble] = useState(false);
   const [bubblePosition, setBubblePosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
@@ -117,18 +118,36 @@ export default function ProjectCard({ emoji, title, description, link, catchphra
         {/* 光效扫过 */}
         <div className="pointer-events-none" />
 
-        {/* 角色图标 */}
-        <div
-          className="card-character character-emoji absolute"
-          style={{
-            top: '20px',
-            right: '20px',
-            fontSize: '32px',
-            opacity: '0.4',
-          }}
-        >
-          {emoji}
-        </div>
+        {/* 角色图标/图片 */}
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={title}
+            className="card-character absolute"
+            style={{
+              top: '15px',
+              right: '15px',
+              width: '48px',
+              height: '48px',
+              objectFit: 'cover',
+              borderRadius: '8px',
+              opacity: '0.7',
+              border: '1px solid var(--border-gold)',
+            }}
+          />
+        ) : (
+          <div
+            className="card-character character-emoji absolute"
+            style={{
+              top: '20px',
+              right: '20px',
+              fontSize: '32px',
+              opacity: '0.4',
+            }}
+          >
+            {emoji}
+          </div>
+        )}
 
         {/* 项目标题 */}
         <h3
