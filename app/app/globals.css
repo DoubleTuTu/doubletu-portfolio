@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* 七龙珠深色配色 */
+  --bg-deep: #0a0a0a;
+  --bg-card: rgba(20, 20, 20, 0.9);
+  --bg-card-hover: rgba(30, 30, 30, 0.95);
+  --dragon-orange: #ff6b00;
+  --dragon-orange-glow: rgba(255, 107, 0, 0.6);
+  --dragon-gold: #ffd700;
+  --star-red: #cc0000;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --border-gold: rgba(255, 215, 0, 0.3);
+  --border-gold-hover: rgba(255, 215, 0, 0.6);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-noto-sans), 'Noto Sans SC', sans-serif !important;
+  background: var(--bg-deep);
+  min-height: 100vh;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* 字体类 - 精确匹配 demo3.html */
+.font-bangers {
+  font-family: var(--font-bangers), 'Bangers', cursive !important;
+}
+
+.font-zcool {
+  font-family: var(--font-zcool), 'ZCOOL KuaiLe', cursive !important;
+}
+
+/* 能量光晕动画 */
+@keyframes energy-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-energy-pulse {
+  animation: energy-pulse 8s ease-in-out infinite;
+}
+
+/* 龙珠漂浮动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* 脉冲发光动画 */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 30px var(--dragon-orange-glow);
+  }
+  50% {
+    box-shadow: 0 0 50px var(--dragon-orange-glow), 0 0 80px rgba(255, 107, 0, 0.4);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+/* 淡入上升动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+/* 发光脉冲动画 */
+@keyframes glow-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* 角色 emoji 弹跳动画（V0.3 新增） */
+@keyframes character-bounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+   25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.character-emoji:hover {
+  animation: character-bounce 0.5s ease-in-out;
+}
+
+/* 能量光晕脉冲动画（V0.3 新增） */
+@keyframes energy-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--dragon-orange),
+                0 0 40px rgba(255, 107, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--dragon-gold),
+                0 0 60px var(--dragon-orange),
+                0 0 80px rgba(255, 215, 0, 0.5);
+  }
+}
+
+.energy-glow {
+  animation: energy-pulse-glow 2s ease-in-out infinite;
+}
